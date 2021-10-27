@@ -16,15 +16,21 @@ public class PlayerController : MonoBehaviour
    [SerializeField] private Animator animator;
    
 
-
+   
+  
    private void Start()
    {
       mainCam.enabled = true;
       secondCam.enabled = false;
+      
+      
    }
 
    private void Update()
    {
+
+     
+      
       if (!animator.GetBool("isSecondCameraActive"))
       {
          if (Input.GetAxis("Vertical") != 0f || Input.GetAxis("Horizontal") != 0f)
@@ -38,6 +44,8 @@ public class PlayerController : MonoBehaviour
             Rotate(Input.GetAxisRaw("Rotate"));
          }
       }
+      
+      
       if (Input.GetKeyDown(KeyCode.LeftAlt))
       {
          SecondCamera(true);
@@ -50,24 +58,30 @@ public class PlayerController : MonoBehaviour
       
    }
 
+   
    private void SecondCamera(bool onOff)
    {
       animator.SetBool("isSecondCameraActive",onOff);
       if (onOff)
       {
-         secondCam.enabled = true;
          mainCam.enabled = false;
+         mainCam.gameObject.GetComponent<MouseLook>().isActive = false;
+         secondCam.enabled = true;
+         secondCam.gameObject.GetComponent<MouseLook>().isActive = true;
       }
       else
       {
          secondCam.enabled = false;
+         secondCam.gameObject.GetComponent<MouseLook>().isActive = false;
          mainCam.enabled = true;
+         mainCam.gameObject.GetComponent<MouseLook>().isActive = true;
+
       }
    }
 
-   private void Rotate(float getAxisRaw)
+   public void Rotate(float angle)
    {
-      transform.Rotate(0f,getAxisRaw*rotateSpeed*Time.deltaTime,0f);
+      transform.Rotate(0f,angle*rotateSpeed*Time.deltaTime,0f);
    }
 
 
